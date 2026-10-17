@@ -21,7 +21,7 @@ export default async function Dashboard() {
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
           <Button asChild>
-            <Link href="/evaluate">شروع ارزیابی</Link>
+            <Link href="/practice">شروع تمرین</Link>
           </Button>
           {isAdmin && (
             <Button asChild variant="outline">
