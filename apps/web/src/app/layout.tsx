@@ -1,30 +1,39 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import "@fontsource/vazirmatn/400.css";
+import "@fontsource/vazirmatn/500.css";
+import "@fontsource/vazirmatn/700.css";
+import "@fontsource/nunito/400.css";
+import "@fontsource/nunito/700.css";
+import "@fontsource/lalezar/400.css";
 import "./globals.css";
-import ThemeSwitcher from "@/components/theme-switcher";
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+import SiteHeader from "@/components/site-header";
+import SiteFooter from "@/components/site-footer";
 
 export const metadata: Metadata = {
-  title: "RLHF",
-  description: "RLHF monorepo web application",
+  title: { default: "RLHF Lab", template: "%s · RLHF Lab" },
+  description: "آموزش و تمرین ارزیابی پاسخ‌های مدل‌های زبانی (RLHF) با سناریوهای دوزبانه",
 };
 
-// قبل از نمایش صفحه تم ذخیره‌شده را اعمال می‌کند تا رنگ نپرد
+export const viewport: Viewport = {
+  themeColor: "#e0559c",
+};
+
+// Applies the saved theme before the page paints so the colors do not flash.
+// Aurora is the default and needs no attribute.
 const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t==="aurora"||t==="nebula"||t==="light"){document.documentElement.dataset.theme=t}}catch(e){}})();`;
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-screen bg-background text-foreground antialiased">
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <SiteHeader />
         {children}
-        <ThemeSwitcher />
+        <SiteFooter />
       </body>
     </html>
   );

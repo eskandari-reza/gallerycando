@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CategoryIcon } from "@/components/icons";
 import { LANG, LEVEL_LABELS, api, categoryTitle } from "@/lib/api";
 import type { CategoryOverview, LevelKey } from "@/lib/api";
 
@@ -26,7 +27,7 @@ export default function PracticeHome() {
   return (
     <main dir="rtl" className="mx-auto max-w-5xl space-y-8 p-4 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">تمرین ارزیابی</h1>
+        <h1 className="text-3xl">تمرین ارزیابی</h1>
         <Link href="/dashboard" className="text-sm text-muted-foreground hover:underline">
           بازگشت به داشبورد
         </Link>
@@ -42,7 +43,7 @@ export default function PracticeHome() {
           return (
             <section key={track.id} className="space-y-3">
               <div>
-                <h2 className="text-lg font-semibold">{track.title}</h2>
+                <h2 className="text-2xl">{track.title}</h2>
                 <p className="text-sm text-muted-foreground">{track.hint}</p>
               </div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -51,17 +52,22 @@ export default function PracticeHome() {
                   const done = LEVEL_ORDER.reduce((s, l) => s + c.levels[l].done, 0);
                   const pct = total ? Math.round((done / total) * 100) : 0;
                   return (
-                    <Link key={c.number} href={`/practice/${c.number}`}>
-                      <Card className="h-full transition-shadow hover:shadow-md">
-                        <CardHeader>
-                          <CardTitle className="text-base">{categoryTitle(c)}</CardTitle>
-                          <p dir="ltr" className="text-start text-xs text-muted-foreground">
-                            {c.nameEn}
-                          </p>
+                    <Link key={c.number} href={`/practice/${c.number}`} className="group">
+                      <Card className="sticker-card h-full transition-transform group-hover:-translate-y-1">
+                        <CardHeader className="flex-row items-center gap-3 space-y-0">
+                          <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-secondary">
+                            <CategoryIcon number={c.number} size={38} />
+                          </span>
+                          <div className="min-w-0">
+                            <CardTitle className="text-base">{categoryTitle(c)}</CardTitle>
+                            <p dir="ltr" className="truncate text-start text-xs text-muted-foreground">
+                              {c.nameEn}
+                            </p>
+                          </div>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                          <div className="h-2 overflow-hidden rounded-full bg-muted">
-                            <div className="h-full bg-primary" style={{ width: `${pct}%` }} />
+                          <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+                            <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
                           </div>
                           <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
                             {LEVEL_ORDER.map((l) => (

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CategoryIcon } from "@/components/icons";
 import { LANG, LEVEL_LABELS, api, categoryTitle } from "@/lib/api";
 import type { CategoryOverview, LevelKey } from "@/lib/api";
 
@@ -45,11 +46,16 @@ export default function CategoryView({ number }: { number: number }) {
 
       {cat && (
         <>
-          <div>
-            <h1 className="text-2xl font-bold">{categoryTitle(cat)}</h1>
-            <p dir="ltr" className="text-start text-sm text-muted-foreground">
-              {cat.nameEn}
-            </p>
+          <div className="flex items-center gap-4">
+            <span className="grid size-20 shrink-0 place-items-center rounded-3xl bg-secondary">
+              <CategoryIcon number={cat.number} size={56} />
+            </span>
+            <div>
+              <h1 className="text-3xl">{categoryTitle(cat)}</h1>
+              <p dir="ltr" className="text-start text-sm text-muted-foreground">
+                {cat.nameEn}
+              </p>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -58,9 +64,9 @@ export default function CategoryView({ number }: { number: number }) {
               const finished = s.total > 0 && s.done >= s.total;
               const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
               return (
-                <Card key={l} className={s.unlocked ? "" : "opacity-70"}>
+                <Card key={l} className={"sticker-card " + (s.unlocked ? "" : "opacity-75")}>
                   <CardHeader className="flex-row items-center justify-between space-y-0">
-                    <CardTitle className="text-lg">
+                    <CardTitle className="text-xl">
                       {LEVEL_LABELS[l]} {s.unlocked ? "" : "🔒"}
                     </CardTitle>
                     <span className="text-sm text-muted-foreground">
@@ -69,8 +75,8 @@ export default function CategoryView({ number }: { number: number }) {
                     </span>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <div className="h-2 overflow-hidden rounded-full bg-muted">
-                      <div className="h-full bg-primary" style={{ width: `${pct}%` }} />
+                    <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+                      <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
                     </div>
                     {s.unlocked ? (
                       finished ? (

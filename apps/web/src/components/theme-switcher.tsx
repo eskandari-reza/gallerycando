@@ -3,44 +3,44 @@
 import { useEffect, useState } from "react";
 
 const THEMES = [
-  { id: "aurora", label: "Aurora" },
-  { id: "nebula", label: "Nebula" },
-  { id: "light", label: "Light" },
+  { id: "aurora", label: "Aurora", swatch: "linear-gradient(135deg,#ff8cc4,#b79cff)" },
+  { id: "nebula", label: "Nebula", swatch: "linear-gradient(135deg,#6a4cff,#1b1535)" },
+  { id: "light", label: "Light", swatch: "linear-gradient(135deg,#8ccfff,#b8f3ea)" },
 ] as const;
 
 export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState<string>("light");
+  const [theme, setTheme] = useState<string>("aurora");
 
   useEffect(() => {
-    setTheme(document.documentElement.dataset.theme ?? "light");
+    setTheme(document.documentElement.dataset.theme ?? "aurora");
   }, []);
 
   function choose(id: string) {
     document.documentElement.dataset.theme = id;
     try {
       localStorage.setItem("theme", id);
-    } catch {}
+    } catch {
+      /* storage may be blocked */
+    }
     setTheme(id);
   }
 
   return (
-    <div
-      dir="ltr"
-      className="fixed bottom-4 right-4 z-50 flex gap-1 rounded-full border border-border bg-card p-1 shadow-md"
-    >
+    <div dir="ltr" className="flex items-center gap-1.5" role="group" aria-label="تم سایت">
       {THEMES.map((t) => (
         <button
           key={t.id}
+          type="button"
+          title={t.label}
+          aria-label={t.label}
+          aria-pressed={theme === t.id}
           onClick={() => choose(t.id)}
+          style={{ background: t.swatch }}
           className={
-            "rounded-full px-3 py-1 text-xs font-medium transition-colors " +
-            (theme === t.id
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:bg-muted")
+            "size-7 rounded-full border-2 border-card transition-transform hover:scale-110 " +
+            (theme === t.id ? "ring-2 ring-primary ring-offset-2 ring-offset-card" : "")
           }
-        >
-          {t.label}
-        </button>
+        />
       ))}
     </div>
   );

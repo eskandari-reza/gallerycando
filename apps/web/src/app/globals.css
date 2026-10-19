@@ -4,6 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Fonts (self-hosted through @fontsource, imported in layout.tsx) */
+@theme {
+  --font-sans: "Nunito", "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Lalezar", "Nunito", "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -36,8 +42,6 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -47,10 +51,10 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* متغیرهای مشترک بین هر سه تم (باید قبل از تم‌ها بیاید) */
+/* Shared by all themes (must come before the theme blocks) */
 :root,
 [data-theme] {
-  --radius: 0.75rem;
+  --radius: 1.25rem;
   --chart-1: var(--primary);
   --chart-2: var(--accent);
   --chart-3: var(--muted-foreground);
@@ -64,93 +68,172 @@
   --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+  /* icon fills follow the theme */
+  --icon-a: color-mix(in oklab, var(--primary) 38%, var(--card));
+  --icon-b: color-mix(in oklab, var(--accent) 85%, var(--card));
+  --outline: color-mix(in oklab, var(--foreground) 55%, var(--card));
 }
 
-/* Light (پیش‌فرض) */
+/* Aurora: soft pink and lilac (default) */
 :root,
-[data-theme="light"] {
-  --background: oklch(99% 0.003 250);
-  --foreground: oklch(22% 0.02 260);
-  --card: oklch(100% 0 0);
-  --card-foreground: oklch(22% 0.02 260);
-  --popover: oklch(100% 0 0);
-  --popover-foreground: oklch(22% 0.02 260);
-  --muted: oklch(96% 0.008 250);
-  --muted-foreground: oklch(52% 0.03 255);
-  --border: oklch(91% 0.01 250);
-  --input: oklch(91% 0.01 250);
-  --primary: oklch(58% 0.07 255);
-  --primary-foreground: oklch(99% 0 0);
-  --secondary: oklch(96% 0.008 250);
-  --secondary-foreground: oklch(30% 0.04 255);
-  --accent: oklch(93% 0.03 250);
-  --accent-foreground: oklch(30% 0.04 255);
-  --destructive: oklch(58% 0.22 27);
-  --ring: oklch(58% 0.07 255);
-  --hero: linear-gradient(135deg, oklch(96% 0.02 250), oklch(99% 0.003 250));
-}
-
-/* Aurora: فانتزی روشن */
 [data-theme="aurora"] {
-  --background: oklch(96% 0.035 320);
-  --foreground: oklch(20% 0.02 300);
-  --card: oklch(100% 0.005 330);
-  --card-foreground: oklch(20% 0.02 300);
-  --popover: oklch(100% 0.005 330);
-  --popover-foreground: oklch(20% 0.02 300);
-  --muted: oklch(96% 0.02 320);
-  --muted-foreground: oklch(50% 0.04 300);
-  --border: oklch(90% 0.03 320);
-  --input: oklch(88% 0.04 320);
-  --primary: oklch(70% 0.18 355);
+  --background: oklch(96.5% 0.03 330);
+  --foreground: oklch(28% 0.05 310);
+  --card: oklch(99% 0.012 340);
+  --card-foreground: oklch(28% 0.05 310);
+  --popover: oklch(99% 0.012 340);
+  --popover-foreground: oklch(28% 0.05 310);
+  --muted: oklch(95% 0.03 325);
+  --muted-foreground: oklch(46% 0.06 310);
+  --border: oklch(88% 0.055 330);
+  --input: oklch(86% 0.06 330);
+  --primary: oklch(60% 0.2 350);
   --primary-foreground: oklch(99% 0 0);
-  --secondary: oklch(94% 0.03 320);
-  --secondary-foreground: oklch(30% 0.05 310);
-  --accent: oklch(85% 0.12 50);
-  --accent-foreground: oklch(30% 0.06 50);
-  --destructive: oklch(60% 0.22 20);
-  --ring: oklch(70% 0.18 355);
-  --hero: linear-gradient(135deg, oklch(65% 0.22 330 / 0.35), oklch(72% 0.18 290 / 0.35));
+  --secondary: oklch(91% 0.06 300);
+  --secondary-foreground: oklch(32% 0.09 300);
+  --accent: oklch(88% 0.1 55);
+  --accent-foreground: oklch(32% 0.08 50);
+  --destructive: oklch(58% 0.22 25);
+  --ring: oklch(65% 0.18 350);
+  --glow: oklch(75% 0.15 340 / 0.45);
+  --sparkle: oklch(78% 0.13 335);
+  --hero: linear-gradient(135deg, oklch(93% 0.07 335 / 0.55), oklch(93% 0.06 295 / 0.5) 55%, oklch(94% 0.07 60 / 0.45));
 }
 
-/* Nebula: فانتزی تیره */
+/* Nebula: night sky */
 [data-theme="nebula"] {
   color-scheme: dark;
-  --background: oklch(18% 0.03 280);
-  --foreground: oklch(95% 0.01 280);
-  --card: oklch(23% 0.04 280);
-  --card-foreground: oklch(95% 0.01 280);
-  --popover: oklch(23% 0.04 280);
-  --popover-foreground: oklch(95% 0.01 280);
-  --muted: oklch(27% 0.04 280);
-  --muted-foreground: oklch(72% 0.03 280);
-  --border: oklch(32% 0.05 285);
-  --input: oklch(32% 0.05 285);
-  --primary: oklch(60% 0.22 290);
+  --background: oklch(17% 0.04 285);
+  --foreground: oklch(95% 0.02 300);
+  --card: oklch(23% 0.055 285);
+  --card-foreground: oklch(95% 0.02 300);
+  --popover: oklch(23% 0.055 285);
+  --popover-foreground: oklch(95% 0.02 300);
+  --muted: oklch(27% 0.05 285);
+  --muted-foreground: oklch(75% 0.04 295);
+  --border: oklch(34% 0.07 290);
+  --input: oklch(34% 0.07 290);
+  --primary: oklch(58% 0.22 295);
   --primary-foreground: oklch(99% 0 0);
-  --secondary: oklch(30% 0.05 285);
-  --secondary-foreground: oklch(92% 0.02 280);
-  --accent: oklch(78% 0.14 60);
-  --accent-foreground: oklch(22% 0.05 60);
-  --destructive: oklch(65% 0.2 25);
-  --ring: oklch(70% 0.2 290);
-  --hero: linear-gradient(135deg, oklch(70% 0.2 290 / 0.22), oklch(75% 0.18 200 / 0.14));
+  --secondary: oklch(31% 0.07 290);
+  --secondary-foreground: oklch(92% 0.03 295);
+  --accent: oklch(80% 0.15 65);
+  --accent-foreground: oklch(24% 0.06 60);
+  --destructive: oklch(66% 0.2 25);
+  --ring: oklch(70% 0.2 295);
+  --glow: oklch(60% 0.22 295 / 0.45);
+  --sparkle: oklch(88% 0.1 290);
+  --hero: linear-gradient(135deg, oklch(45% 0.18 295 / 0.35), oklch(60% 0.14 215 / 0.18) 60%, oklch(28% 0.08 285 / 0.3));
+}
+
+/* Light: sky blue and mint */
+[data-theme="light"] {
+  --background: oklch(98% 0.016 230);
+  --foreground: oklch(28% 0.045 255);
+  --card: oklch(100% 0.004 230);
+  --card-foreground: oklch(28% 0.045 255);
+  --popover: oklch(100% 0.004 230);
+  --popover-foreground: oklch(28% 0.045 255);
+  --muted: oklch(95.5% 0.025 235);
+  --muted-foreground: oklch(46% 0.05 250);
+  --border: oklch(89% 0.04 235);
+  --input: oklch(87% 0.045 235);
+  --primary: oklch(57% 0.14 245);
+  --primary-foreground: oklch(99% 0 0);
+  --secondary: oklch(94% 0.035 220);
+  --secondary-foreground: oklch(32% 0.07 250);
+  --accent: oklch(90% 0.09 190);
+  --accent-foreground: oklch(30% 0.07 200);
+  --destructive: oklch(58% 0.22 25);
+  --ring: oklch(62% 0.14 245);
+  --glow: oklch(75% 0.1 235 / 0.4);
+  --sparkle: oklch(80% 0.09 230);
+  --hero: linear-gradient(135deg, oklch(95% 0.04 230 / 0.6), oklch(96% 0.035 195 / 0.5));
 }
 
 body {
   background-color: var(--background);
   background-image: var(--hero);
   background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* tiny stars in the background, tinted by the theme */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(circle at 8% 12%, var(--sparkle) 0 2px, transparent 3px),
+    radial-gradient(circle at 27% 71%, var(--sparkle) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 46% 28%, var(--sparkle) 0 2.5px, transparent 3.5px),
+    radial-gradient(circle at 63% 83%, var(--sparkle) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 81% 41%, var(--sparkle) 0 2px, transparent 3px),
+    radial-gradient(circle at 93% 90%, var(--sparkle) 0 2.5px, transparent 3.5px),
+    radial-gradient(circle at 72% 9%, var(--sparkle) 0 1.5px, transparent 2.5px);
+  background-size: 420px 420px;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    @apply font-sans;
+  }
   body {
     @apply text-foreground;
   }
-  html {
-    @apply font-sans;
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+  }
+}
+
+@layer components {
+  /* chunky "sticker" cards with a soft glow */
+  .sticker-card {
+    border-width: 2px;
+    border-color: var(--border);
+    box-shadow:
+      0 5px 0 0 color-mix(in oklab, var(--border) 85%, transparent),
+      0 18px 30px -18px var(--glow);
+  }
+  .floaty {
+    animation: floaty 6s ease-in-out infinite;
+  }
+  .twinkle {
+    animation: twinkle 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floaty,
+  .twinkle {
+    animation: none;
   }
 }
