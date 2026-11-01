@@ -52,12 +52,29 @@ jobs:
           printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+      # - name: Copy stack files and deploy
+      #   env:
+      #     HOST: ${{ secrets.DEPLOY_HOST }}
+      #     DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      #   run: |
+      #     scp deploy/docker-compose.prod.yml "$DEPLOY_USER@$HOST:/opt/rlhf/docker-compose.yml"
+      #     scp deploy/Caddyfile "$DEPLOY_USER@$HOST:/opt/rlhf/Caddyfile"
+      #     scp deploy/backup.sh "$DEPLOY_USER@$HOST:/opt/rlhf/backup.sh"
+      #     ssh "$DEPLOY_USER@$HOST" 'cd /opt/rlhf && chmod +x backup.sh && docker compose pull && docker compose up -d --remove-orphans && docker image prune -f'
       - name: Copy stack files and deploy
+        timeout-minutes: 10
         env:
           HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
         run: |
           scp deploy/docker-compose.prod.yml "$DEPLOY_USER@$HOST:/opt/rlhf/docker-compose.yml"
           scp deploy/Caddyfile "$DEPLOY_USER@$HOST:/opt/rlhf/Caddyfile"
           scp deploy/backup.sh "$DEPLOY_USER@$HOST:/opt/rlhf/backup.sh"
-          ssh "$DEPLOY_USER@$HOST" 'cd /opt/rlhf && chmod +x backup.sh && docker compose pull && docker compose up -d --remove-orphans && docker image prune -f'
+          
+          # لاگین به GHCR با استفاده از توکن گیت‌هاب
+          ssh "$DEPLOY_USER@$HOST" "echo '$GHCR_TOKEN' | docker login ghcr.io -u '$GHCR_USER' --password-stdin"
+          
+          # اجرای دستورات با محدودیت زمانی
+          ssh "$DEPLOY_USER@$HOST" 'cd /opt/rlhf && chmod +x backup.sh && timeout 300 docker compose pull && timeout 300 docker compose up -d --remove-orphans && docker image prune -f'
