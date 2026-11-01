@@ -1,0 +1,26 @@
+# HTTPS certificates are requested and renewed automatically.
+www.rlhf.ir {
+	redir https://rlhf.ir{uri} permanent
+}
+
+rlhf.ir {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		-Server
+	}
+
+	# the API lives under /backend on the same domain (no CORS, shared login cookie)
+	handle_path /backend/* {
+		reverse_proxy api:3001
+	}
+
+	handle {
+		reverse_proxy web:3000
+	}
+}
