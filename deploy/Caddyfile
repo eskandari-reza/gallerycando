@@ -1,9 +1,9 @@
 # HTTPS certificates are requested and renewed automatically.
-www.rlhf.ir {
-	redir https://rlhf.ir{uri} permanent
+www.gallerycando.ir {
+	redir https://gallerycando.ir{uri} permanent
 }
 
-rlhf.ir {
+gallerycando.ir {
 	encode zstd gzip
 
 	header {

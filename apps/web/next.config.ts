@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["@rlhf/db", "@rlhf/shared", "@rlhf/ui"],
+  transpilePackages: ["@gallerycando/db", "@gallerycando/shared", "@gallerycando/ui"],
 };
 
 export default nextConfig;
